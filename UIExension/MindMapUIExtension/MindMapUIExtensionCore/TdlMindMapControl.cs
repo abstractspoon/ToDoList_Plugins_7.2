@@ -330,7 +330,6 @@ namespace MindMapUIExtension
                 case UIExtension.TaskAttribute.DoneDate:
 			    case UIExtension.TaskAttribute.Position:
 			    case UIExtension.TaskAttribute.SubtaskDone:
-				case UIExtension.TaskAttribute.ProjectName:
 					return true;
             }
 

@@ -64,11 +64,6 @@
       <Command>mkdir "$(SolutionDir)$(ConfigurationName)"
 copy $(TargetPath) "$(SolutionDir)$(ConfigurationName)\"
 
-mkdir "$(SolutionDir)..\ToDoList_Dev\ToDoList"
-mkdir "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)"
-copy $(TargetPath) "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)\"
-copy $(TargetDir)$(TargetName).pdb "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)\"
-
 mkdir "$(SolutionDir)..\ToDoList_7.2\ToDoList"
 mkdir "$(SolutionDir)..\ToDoList_7.2\ToDoList\unicode_$(ConfigurationName)"
 copy $(TargetPath) "$(SolutionDir)..\ToDoList_7.2\ToDoList\unicode_$(ConfigurationName)\"
@@ -95,11 +90,6 @@ copy $(TargetDir)$(TargetName).pdb "$(SolutionDir)..\ToDoList_7.2\ToDoList\unico
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)$(ConfigurationName)"
 copy $(TargetPath) "$(SolutionDir)$(ConfigurationName)\"
-
-mkdir "$(SolutionDir)..\ToDoList_Dev\ToDoList"
-mkdir "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)"
-copy $(TargetPath) "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)\"
-copy $(TargetDir)$(TargetName).pdb "$(SolutionDir)..\ToDoList_Dev\ToDoList\unicode_$(ConfigurationName)\"
 
 mkdir "$(SolutionDir)..\ToDoList_7.2\ToDoList"
 mkdir "$(SolutionDir)..\ToDoList_7.2\ToDoList\unicode_$(ConfigurationName)"

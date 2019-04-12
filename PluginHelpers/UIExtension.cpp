@@ -54,8 +54,6 @@ UIExtension::TaskAttribute UIExtension::Map(IUI_ATTRIBUTE attrib)
 	case IUI_CUSTOMATTRIB:	return UIExtension::TaskAttribute::CustomAttribute;
 	case IUI_OFFSETTASK:	return UIExtension::TaskAttribute::OffsetTask;
 	case IUI_SUBTASKDONE:	return UIExtension::TaskAttribute::SubtaskDone;
-	case IUI_METADATA:		return UIExtension::TaskAttribute::MetaData;
-	case IUI_PROJECTNAME:	return UIExtension::TaskAttribute::ProjectName;
 		//  case IUI_
 	}
 
@@ -98,8 +96,6 @@ IUI_ATTRIBUTE UIExtension::Map(UIExtension::TaskAttribute attrib)
 	case UIExtension::TaskAttribute::CustomAttribute:	return IUI_CUSTOMATTRIB;
 	case UIExtension::TaskAttribute::OffsetTask:		return IUI_OFFSETTASK;	
 	case UIExtension::TaskAttribute::SubtaskDone:		return IUI_SUBTASKDONE;
-	case UIExtension::TaskAttribute::MetaData:			return IUI_METADATA;
-	case UIExtension::TaskAttribute::ProjectName:		return IUI_PROJECTNAME;
 		//  case IUI_
 	}
 
