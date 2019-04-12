@@ -5,8 +5,8 @@
 #include "pluginhelpers.h"
 #include "ContentControl.h"
 
-#include "..\..\ToDoList_Dev\Interfaces\UITheme.h"
-#include "..\..\ToDoList_Dev\Interfaces\IContentControl.h"
+#include "..\..\ToDoList_7.2\Interfaces\UITheme.h"
+#include "..\..\ToDoList_7.2\Interfaces\IContentControl.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

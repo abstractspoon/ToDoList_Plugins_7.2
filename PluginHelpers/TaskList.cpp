@@ -9,8 +9,8 @@
 
 #include "..\..\ToDoList_Dev\3rdParty\T64Utils.h"
 
-#include "..\..\ToDoList_Dev\Interfaces\ITasklist.h"
-#include "..\..\ToDoList_Dev\Interfaces\TasklistSchemaDef.h"
+#include "..\..\ToDoList_7.2\Interfaces\ITasklist.h"
+#include "..\..\ToDoList_7.2\Interfaces\TasklistSchemaDef.h"
 
 #include <OleAuto.h>
 #include <time.h>

@@ -6,9 +6,9 @@
 #include "UIExtension.h"
 #include "Win32.h"
 
-#include "..\..\ToDoList_Dev\Interfaces\UITheme.h"
-#include "..\..\ToDoList_Dev\Interfaces\IUIExtension.h"
-#include "..\..\ToDoList_Dev\Interfaces\ITasklist.h"
+#include "..\..\ToDoList_7.2\Interfaces\UITheme.h"
+#include "..\..\ToDoList_7.2\Interfaces\IUIExtension.h"
+#include "..\..\ToDoList_7.2\Interfaces\ITasklist.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

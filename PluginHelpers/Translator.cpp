@@ -5,7 +5,7 @@
 #include "pluginhelpers.h"
 #include "Translator.h"
 
-#include "..\..\ToDoList_Dev\Interfaces\ITransText.h"
+#include "..\..\ToDoList_7.2\Interfaces\ITransText.h"
 
 using namespace Abstractspoon::Tdl::PluginHelpers;
 

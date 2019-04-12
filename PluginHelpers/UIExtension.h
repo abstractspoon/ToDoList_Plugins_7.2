@@ -9,7 +9,7 @@
 #include "Preferences.h"
 #include "UITheme.h"
 
-#include "..\..\ToDoList_Dev\Interfaces\IUIExtension.h"
+#include "..\..\ToDoList_7.2\Interfaces\IUIExtension.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
