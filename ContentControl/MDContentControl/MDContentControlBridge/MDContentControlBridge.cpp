@@ -9,10 +9,10 @@
 #include <tchar.h>
 #include <msclr\auto_gcroot.h>
 
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ITransText.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\IPreferences.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\UITheme.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ISpellcheck.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ITransText.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\IPreferences.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\UITheme.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ISpellcheck.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

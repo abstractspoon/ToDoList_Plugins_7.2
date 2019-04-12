@@ -9,10 +9,10 @@
 #include "DayViewUIExtensionBridge.h"
 #include "resource.h"
 
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ITasklist.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ITransText.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\IPreferences.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\UITheme.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ITasklist.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ITransText.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\IPreferences.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\UITheme.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

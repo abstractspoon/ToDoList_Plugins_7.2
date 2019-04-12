@@ -9,9 +9,9 @@
 #include <tchar.h>
 #include <msclr\auto_gcroot.h>
 
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ITasklist.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\ITransText.h"
-#include "..\..\..\..\ToDoList_Dev\Interfaces\IPreferences.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ITasklist.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\ITransText.h"
+#include "..\..\..\..\ToDoList_7.2\Interfaces\IPreferences.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
