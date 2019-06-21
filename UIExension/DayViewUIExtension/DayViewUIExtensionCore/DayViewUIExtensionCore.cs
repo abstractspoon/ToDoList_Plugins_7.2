@@ -18,7 +18,7 @@ namespace DayViewUIExtension
 		private Translator m_Trans;
 		private UIExtension.TaskIcon m_TaskIcons;
         private String m_HelpID;
-
+		
         [Flags] private enum WeekendDays
         {
 	        SUNDAY		= 0X01,
@@ -429,6 +429,7 @@ namespace DayViewUIExtension
 		private void UpdateDayViewPreferences()
 		{
             m_DayView.HideParentTasks = m_PrefsDlg.HideParentTasks;
+			m_DayView.DisplayTasksContinuous = m_PrefsDlg.DisplayTasksContinuous;
 			m_DayView.HideTasksWithoutTimes = m_PrefsDlg.HideTasksWithoutTimes;
             m_DayView.HideTasksSpanningWeekends = m_PrefsDlg.HideTasksSpanningWeekends;
             m_DayView.HideTasksSpanningDays = m_PrefsDlg.HideTasksSpanningDays;
@@ -551,6 +552,16 @@ namespace DayViewUIExtension
 		{
             UIExtension.ParentNotify notify = new UIExtension.ParentNotify(m_HwndParent);
 
+			if (m_DayView.Selection != Calendar.SelectionType.None)
+			{
+				UpdatedSelectedTaskDatesText();
+
+				if (args.Appointment != null)
+					notify.NotifySelChange(args.Appointment.Id);
+				else
+					notify.NotifySelChange(0);
+			}
+/*
 			switch (m_DayView.Selection)
 			{
 				case Calendar.SelectionType.DateRange:
@@ -561,6 +572,7 @@ namespace DayViewUIExtension
                         notify.NotifySelChange(args.Appointment.Id);
 					break;
 			}
+*/
 		}
 
 		private void OnDayViewWeekChanged(object sender, Calendar.WeekChangeEventArgs args)
@@ -576,6 +588,7 @@ namespace DayViewUIExtension
 
 				m_SettingMonthYear = false;
 			}
+
 		}
 
 		private void OnMonthYearSelChanged(object sender, EventArgs args)

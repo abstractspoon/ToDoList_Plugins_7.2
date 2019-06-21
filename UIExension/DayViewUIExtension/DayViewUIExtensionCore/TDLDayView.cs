@@ -15,11 +15,13 @@ namespace DayViewUIExtension
 	public class TDLDayView : Calendar.DayView
     {
         private UInt32 m_SelectedTaskID = 0;
+		private UInt32 m_VisibleSelectedTaskID = 0;
 
 		private int m_UserMinSlotHeight = -1;
 
         private Boolean m_HideParentTasks = true;
-        private Boolean m_HideTasksWithoutTimes = true;
+		private Boolean m_DisplayTasksContinuous = true;
+		private Boolean m_HideTasksWithoutTimes = true;
         private Boolean m_HideTasksSpanningWeekends = false;
         private Boolean m_HideTasksSpanningDays = false;
 
@@ -115,12 +117,25 @@ namespace DayViewUIExtension
                 if (value != m_HideParentTasks)
                 {
                     m_HideParentTasks = value;
-                    FixupSelection(false);
+                    FixupSelection(false, true);
                 }
             }
         }
 
-        public Boolean HideTasksWithoutTimes
+		public Boolean DisplayTasksContinuous
+		{
+			get { return m_DisplayTasksContinuous; }
+			set
+			{
+				if (value != m_DisplayTasksContinuous)
+				{
+					m_DisplayTasksContinuous = value;
+					FixupSelection(false, true);
+				}
+			}
+		}
+
+		public Boolean HideTasksWithoutTimes
         {
             get { return m_HideTasksWithoutTimes; }
             set
@@ -128,7 +143,7 @@ namespace DayViewUIExtension
                 if (value != m_HideTasksWithoutTimes)
                 {
                     m_HideTasksWithoutTimes = value;
-                    FixupSelection(false);
+                    FixupSelection(false, true);
                 }
             }
         }
@@ -141,7 +156,7 @@ namespace DayViewUIExtension
                 if (value != m_HideTasksSpanningWeekends)
                 {
                     m_HideTasksSpanningWeekends = value;
-                    FixupSelection(false);
+                    FixupSelection(false, true);
                 }
             }
         }
@@ -154,41 +169,9 @@ namespace DayViewUIExtension
                 if (value != m_HideTasksSpanningDays)
                 {
                     m_HideTasksSpanningDays = value;
-                    FixupSelection(false);
+                    FixupSelection(false, true);
                 }
             }
-        }
-
-        public bool IsItemDisplayable(CalendarItem item)
-        {
-            if (item == null)
-                return false;
-
-            if (HideParentTasks && item.IsParent)
-                return false;
-
-            if (!item.HasValidDates())
-                return false;
-
-            if (HideTasksSpanningWeekends)
-            {
-                if (DateUtil.WeekOfYear(item.StartDate) != DateUtil.WeekOfYear(item.EndDate))
-                return false;
-            }
-
-            if (HideTasksSpanningDays)
-            {
-                if (item.StartDate.Date != item.EndDate.Date)
-                return false;
-            }
-
-            if (HideTasksWithoutTimes)
-            {
-                if (CalendarItem.IsStartOfDay(item.StartDate) && CalendarItem.IsEndOfDay(item.EndDate))
-                return false;
-            }
-
-            return true;
         }
 
         public UInt32 GetSelectedTaskID()
@@ -199,12 +182,34 @@ namespace DayViewUIExtension
             return m_SelectedTaskID;
         }
 
-        public void FixupSelection(bool scrollToTask)
+		public bool GetSelectedTaskDates(ref DateTime from, ref DateTime to)
+		{
+			UInt32 selTaskID = GetSelectedTaskID();
+
+			if (selTaskID == 0)
+				return false;
+
+			CalendarItem item;
+
+			if (!m_Items.TryGetValue(selTaskID, out item))
+				return false;
+
+			from = item.StartDate;
+			to = item.EndDate;
+
+			return true;
+		}
+
+		public void FixupSelection(bool scrollToTask, bool allowNotify)
         {
-            UInt32 prevSelTaskID = SelectedAppointmentId;
+			// Our base class clears the selected appointment whenever
+			// the week changes so we can't rely on 'SelectedAppointmentId'
+            UInt32 prevSelTaskID = m_VisibleSelectedTaskID;
             UInt32 selTaskID = GetSelectedTaskID();
 
-            if (selTaskID > 0)
+			m_VisibleSelectedTaskID = selTaskID;
+			
+			if (selTaskID > 0)
             {
                 CalendarItem item;
 
@@ -218,29 +223,32 @@ namespace DayViewUIExtension
                             SelectedAppointment = item;
 
                             ScrollToTop();
-                            return;
                         }
                     }
                     else if (IsItemWithinRange(item, StartDate, EndDate))
                     {
                         SelectedAppointment = item;
-                        return;
                     }
                 }
-            }
-
-            // all else
-            SelectedAppointment = null;
-
-            // Notify parent of changes
-            if (SelectedAppointmentId != prevSelTaskID)
+				else
+				{
+					SelectedAppointment = null;
+				}
+			}
+			else
+			{
+				SelectedAppointment = null;
+			}
+			
+			// Notify parent of changes
+			if (allowNotify && (GetSelectedTaskID() != prevSelTaskID))
                 RaiseSelectionChanged();
         }
 
 		public bool SelectTask(UInt32 dwTaskID)
 		{
             m_SelectedTaskID = dwTaskID;
-            FixupSelection(true);
+            FixupSelection(true, false);
 
 			return (GetSelectedTaskID() != 0);
 		}
@@ -313,7 +321,15 @@ namespace DayViewUIExtension
 			return false;
 		}
 
-    	private bool IsItemWithinRange(CalendarItem item, DateTime startDate, DateTime endDate)
+		public bool IsItemDisplayable(CalendarItem item)
+		{
+			// Provide infinite range because this check
+			// is uninterested in the current week, it's more
+			// of a 'static' kind of check
+			return IsItemWithinRange(item, DateTime.MinValue, DateTime.MaxValue);
+		}
+
+		private bool IsItemWithinRange(CalendarItem item, DateTime startDate, DateTime endDate)
 		{
             if (HideParentTasks && item.IsParent)
                 return false;
@@ -321,18 +337,23 @@ namespace DayViewUIExtension
 			if (!item.HasValidDates())
 				return false;
 
-			bool startDateInRange = IsDateWithinRange(item.StartDate, startDate, endDate);
-			bool endDateInRange = IsDateWithinRange(item.EndDate, startDate, endDate);
-
-			// As a bare minimum, at least one of the task's dates must fall in the week
-			if (!startDateInRange && !endDateInRange)
+			// Task must at least intersect the range
+			if ((item.StartDate > endDate) || (item.EndDate < startDate))
+			{
 				return false;
+			}
 
-            if (HideTasksSpanningWeekends)
-            {
-				if (!startDateInRange || !endDateInRange)
-                    return false;
-            }
+			if (!DisplayTasksContinuous)
+			{
+				if ((item.StartDate < startDate) && (item.EndDate > endDate))
+					return false;
+			}
+
+			if (HideTasksSpanningWeekends)
+			{
+				if (DateUtil.WeekOfYear(item.StartDate) != DateUtil.WeekOfYear(item.EndDate))
+					return false;
+			}
 
             if (HideTasksSpanningDays)
             {
@@ -347,11 +368,6 @@ namespace DayViewUIExtension
 			}
 
             return true;
-		}
-
-		private bool IsDateWithinRange(DateTime date, DateTime startDate, DateTime endDate)
-		{
-			return ((date.Date >= startDate) && (date.Date < endDate));
 		}
 
 		public void UpdateTasks(TaskList tasks,
@@ -500,7 +516,8 @@ namespace DayViewUIExtension
 				gripRect.X = rect.X;
 				gripRect.Width = 0;
 			}
-			else if (appointment.EndDate >= EndDate)
+
+			if (appointment.EndDate >= EndDate)
 			{
 				rect.Width += 5;
 			}
@@ -524,12 +541,17 @@ namespace DayViewUIExtension
         private void OnSelectionChanged(object sender, Calendar.AppointmentEventArgs args)
         {
             if (args.Appointment != null)
-                m_SelectedTaskID = args.Appointment.Id;
-        }
+			{
+				m_SelectedTaskID = args.Appointment.Id;
+
+				// User made this selection so the task must be visible
+				m_VisibleSelectedTaskID = m_SelectedTaskID;
+			}
+		}
 
         private void OnWeekChanged(object sender, Calendar.WeekChangeEventArgs args)
         {
-            FixupSelection(false);
+            FixupSelection(false, true);
         }
 
         protected override void OnGotFocus(EventArgs e)
