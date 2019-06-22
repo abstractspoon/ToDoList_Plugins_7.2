@@ -554,25 +554,11 @@ namespace DayViewUIExtension
 
 			if (m_DayView.Selection != Calendar.SelectionType.None)
 			{
-				UpdatedSelectedTaskDatesText();
-
 				if (args.Appointment != null)
 					notify.NotifySelChange(args.Appointment.Id);
 				else
 					notify.NotifySelChange(0);
 			}
-/*
-			switch (m_DayView.Selection)
-			{
-				case Calendar.SelectionType.DateRange:
-					break;
-
-                case Calendar.SelectionType.Appointment:
-                    if (args.Appointment != null)
-                        notify.NotifySelChange(args.Appointment.Id);
-					break;
-			}
-*/
 		}
 
 		private void OnDayViewWeekChanged(object sender, Calendar.WeekChangeEventArgs args)
