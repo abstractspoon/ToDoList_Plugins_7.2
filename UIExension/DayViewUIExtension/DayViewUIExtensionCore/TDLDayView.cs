@@ -242,8 +242,13 @@ namespace DayViewUIExtension
 			
 			// Notify parent of changes
 			if (allowNotify && (GetSelectedTaskID() != prevSelTaskID))
-                RaiseSelectionChanged();
-        }
+			{
+				CalendarItem item = null;
+				m_Items.TryGetValue(m_VisibleSelectedTaskID, out item);
+
+				RaiseSelectionChanged(item);
+			}
+		}
 
 		public bool SelectTask(UInt32 dwTaskID)
 		{
