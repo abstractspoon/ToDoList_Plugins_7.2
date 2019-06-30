@@ -653,10 +653,16 @@ namespace DayViewUIExtension
 				case Calendar.SelectionTool.Mode.ResizeBottom:
 					if (item.EndDateDiffersFromOriginal())
 					{
+						// Allow for end of day
+						var endDate = item.EndDate;
+
+						if (endDate == endDate.Date)
+							endDate = endDate.AddDays(-1);
+
 						if (item.IsDone)
-							notify.AddMod(UIExtension.TaskAttribute.DoneDate, item.EndDate);
+							notify.AddMod(UIExtension.TaskAttribute.DoneDate, endDate);
 						else
-							notify.AddMod(UIExtension.TaskAttribute.DueDate, item.EndDate);
+							notify.AddMod(UIExtension.TaskAttribute.DueDate, endDate);
 
 						// Update the Time estimate if used to match the previous date range
 						bool modifyTimeEst = WantModifyTimeEstimate(item);
@@ -683,8 +689,9 @@ namespace DayViewUIExtension
 
         protected bool WantModifyTimeEstimate(CalendarItem item)
         {
-            // Update the Time estimate if it is zero or it used to match the previous date range
-            if ((item.TimeEstimate == 0.0) && item.TimeEstimateIsMinsOrHours)
+			// Update the Time estimate if it is zero and the task is less than a day
+			// or if it used to match the previous date range
+            if ((item.TimeEstimate == 0.0) && item.TimeEstimateIsMinsOrHours && (item.Length < new TimeSpan(23, 59, 59)))
                 return true;
 
             // else
