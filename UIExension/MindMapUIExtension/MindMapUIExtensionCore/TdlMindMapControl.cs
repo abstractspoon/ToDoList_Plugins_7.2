@@ -264,7 +264,7 @@ namespace MindMapUIExtension
 					if (RootNode == null)
 						RebuildTreeView(tasks);
 					else
-						UpdateTaskAttributes(tasks, attribs, (type == UIExtension.UpdateType.New));
+						UpdateTaskAttributes(tasks, attribs);
 					break;
 
 				case UIExtension.UpdateType.Delete:
@@ -565,8 +565,7 @@ namespace MindMapUIExtension
 		}
 
 		protected void UpdateTaskAttributes(TaskList tasks,
-								HashSet<UIExtension.TaskAttribute> attribs,
-								bool newTask)
+								HashSet<UIExtension.TaskAttribute> attribs)
 		{
 			var rootItem = TaskItem(RootNode);
 
@@ -1107,6 +1106,9 @@ namespace MindMapUIExtension
                             // counter-intuitively it works from 'MouseDown'
                             if (!m_IgnoreMouseClick && !ReadOnly && HitTestIcon(hit, e.Location))
                             {
+								// Ensure the node is selected
+								SelectedNode = hit;
+
                                 if (EditTaskIcon != null)
                                     EditTaskIcon(this, UniqueID(SelectedNode));
                             }
